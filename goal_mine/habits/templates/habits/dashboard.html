@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #e8f0f2, #a7c4bc); /* Green gradient background */
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      color: #2a7a5e;
+    }
+    h2 {
+      margin-top: 30px;
+      color: #2a7a5e;
+    }
+    .container {
+      width: 80%;
+      margin: 0 auto;
+    }
+    .goals, .streaks, .calendar-section {
+      background-color: #fff;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .goals ul, .streaks ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .goals li, .streaks li {
+      padding: 5px 0;
+    }
+    .streaks li {
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-top: 20px;
+    }
+    .calendar td {
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      color: #fff;
+      position: relative;
+      cursor: pointer;
+    }
+    .calendar td.green {
+      background-color: #2a7a5e;
+    }
+    .calendar td.orange {
+      background-color: #f4a261;
+    }
+    .calendar td.red {
+      background-color: #e63946;
+    }
+    .calendar td.grey {
+      background-color: #bfbfbf;
+    }
+    .calendar td:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    .buttons {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .buttons a button {
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: #2a7a5e;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+    .buttons a button:hover {
+      background-color: #1e5745;
+    }
+    .navigation {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .navigation a {
+      text-decoration: none;
+      color: #2a7a5e;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dashboard</h1>
+  <div class="container">
+
+    <!-- Navigation -->
+    <div class="navigation">
+      <a href="?month={{ month|add:-1 }}&year={{ year }}">← Previous Month</a>
+      <span>{{ month }}/{{ year }}</span>
+      <a href="?month={{ month|add:1 }}&year={{ year }}">Next Month →</a>
+    </div>
+
+    <!-- Goals Section -->
+    <div class="goals">
+      <h2>Your Goals</h2>
+      <ul>
+        {% for goal in goals %}
+          <li>{{ goal.name }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Calendar Section -->
+    <div class="calendar-section">
+      <h2>Calendar</h2>
+      <table class="calendar">
+        <tr>
+          {% for day in calendar_data %}
+            <td class="{{ day.color }}" data-tooltip="{{ day.tooltip }}">{{ day.day }}</td>
+          {% endfor %}
+        </tr>
+      </table>
+    </div>
+
+    <!-- Streaks Section -->
+    <div class="streaks">
+      <h2>Streaks</h2>
+      <ul>
+        {% for goal, streak in streaks.items %}
+          <li>{{ goal }}: {{ streak }} days</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div class="buttons">
+      <a href="{% url 'add_habit_log' %}">
+        <button>Add Habit Log</button>
+      </a>
+      <a href="{% url 'add_goal' %}">
+        <button>Add Goal</button>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
